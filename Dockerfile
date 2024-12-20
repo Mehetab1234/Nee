@@ -1,38 +1,32 @@
 # Start from the latest Ubuntu image
 FROM ubuntu:latest
 
-# Update the package list
-RUN apt-get update -y
-
-# Install essential packages
-RUN apt-get install -y \
-    build-essential \
-    curl \
-    wget \
-    git \
-    vim \
-    python3 \
-    python3-pip \
-    nodejs \
-    npm \
-    openjdk-11-jdk \
-    lsb-release
-
-# Install Docker (if you need Docker inside Docker)
-RUN curl -fsSL https://get.docker.com | sh
-
-# Install other packages (optional)
-RUN apt-get install -y \
-    apache2 \
-    nginx \
-    mysql-server \
-    redis-server
-
-# Set environment variables
+# Set environment variables to avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Expose ports
-EXPOSE 80 443
+# Install necessary packages
+RUN apt-get update -y && \
+    apt-get install -y \
+    bash \
+    curl \
+    vim \
+    git \
+    wget \
+    htop \
+    python3 \
+    python3-pip \
+    build-essential \
+    net-tools \
+    openssh-server \
+    sudo \
+    unzip
 
-# Run an Ubuntu bash shell
+# Expose port 22 for SSH (for remote terminal access)
+EXPOSE 22
+
+# Install OpenSSH for remote terminal access (optional)
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+
+# Set the default command to bash
 CMD ["/bin/bash"]
